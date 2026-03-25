@@ -1,5 +1,6 @@
 package com.domain.cliente;
 
+import com.domain.emprestimo.Emprestimo;
 import com.domain.livro.Livro;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class Cliente {
 
     @Column(nullable = false)
     private String nome;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Emprestimo> listaEmprestimos;
 
 
     public Cliente() {

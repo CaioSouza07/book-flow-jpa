@@ -1,5 +1,7 @@
 package com.domain.livro;
 
+import com.domain.emprestimo.Emprestimo;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +28,9 @@ public class Livro {
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
+    @OneToOne(mappedBy = "livro")
+    private Emprestimo emprestimo;
+
     public Livro() {
     }
 
@@ -42,6 +47,14 @@ public class Livro {
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.disponivel = disponivel;
+    }
+
+    public Emprestimo getEmprestimo() {
+        return emprestimo;
+    }
+
+    public void setEmprestimo(Emprestimo emprestimo) {
+        this.emprestimo = emprestimo;
     }
 
     public Long getId() {
