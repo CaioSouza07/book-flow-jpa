@@ -1,14 +1,35 @@
 package com.domain.livro;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "livros")
 public class Livro {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String titulo;
+
+    @Column(nullable = false)
     private String autor;
+
+    @Column(nullable = false)
     private int anoPublicacao;
+
+    @Column(nullable = false)
     private boolean disponivel;
 
     public Livro() {
+    }
+
+    public Livro(String titulo, String autor, int anoPublicacao, boolean disponivel) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anoPublicacao = anoPublicacao;
+        this.disponivel = disponivel;
     }
 
     public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel) {

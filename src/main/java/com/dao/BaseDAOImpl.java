@@ -3,7 +3,7 @@ package com.dao;
 import com.util.EntityManagerUtil;
 import javax.persistence.EntityManager;
 
-public abstract class BaseDaoImpl<T> implements BaseDAO<T>{
+public abstract class BaseDAOImpl<T> implements BaseDAO<T>{
 
     @Override
     public void salvar(T entity) {

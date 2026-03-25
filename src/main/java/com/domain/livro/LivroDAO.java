@@ -1,6 +1,6 @@
 package com.domain.livro;
 
-import com.dao.BaseDaoImpl;
+import com.dao.BaseDAOImpl;
 
-public class LivroDAO extends BaseDaoImpl<Livro> {
+public class LivroDAO extends BaseDAOImpl<Livro> {
 }
