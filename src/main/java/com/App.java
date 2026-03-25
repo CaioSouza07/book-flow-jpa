@@ -17,7 +17,10 @@ public class App {
 
         while (opcao != 10){
             try{
-                
+                switch (opcao){
+                    case 1:
+                        // aqui vou cadastrar um livro
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -27,5 +30,6 @@ public class App {
     }
 
     private static int exibirMenu() {
+        return 1;
     }
 }
