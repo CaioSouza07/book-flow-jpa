@@ -22,6 +22,10 @@ public class Livro {
     @Column(nullable = false)
     private boolean disponivel;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
+
     public Livro() {
     }
 
