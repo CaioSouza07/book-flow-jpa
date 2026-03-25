@@ -1,5 +1,6 @@
 package com;
 
+import com.domain.cliente.Cliente;
 import com.domain.cliente.ClienteDAO;
 import com.domain.livro.Livro;
 import com.domain.livro.LivroDAO;
@@ -13,18 +14,25 @@ public class App {
 
     public static void main( String[] args ) {
 
-        int opcao = exibirMenu();
+        Cliente cliente = new Cliente("Caio");
+        ClienteDAO dao = new ClienteDAO();
+        dao.salvar(cliente);
+        leitor.next();
 
-        while (opcao != 10){
-            try{
-                switch (opcao){
-                    case 1:
-                        // aqui vou cadastrar um livro
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+
+
+//        int opcao = exibirMenu();
+//
+//        while (opcao != 10){
+//            try{
+//                switch (opcao){
+//                    case 1:
+//                        // aqui vou cadastrar um livro
+//                }
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
 
     }
