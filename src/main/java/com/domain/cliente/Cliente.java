@@ -1,5 +1,6 @@
 package com.domain.cliente;
 
+import com.domain.emprestimo.Emprestimo;
 import com.domain.livro.Livro;
 
 import javax.persistence.*;
@@ -16,19 +17,25 @@ public class Cliente {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
+    private String email;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Emprestimo> listaEmprestimos;
+
 
     public Cliente() {
     }
 
-
-
-    public Cliente(Long id, String nome) {
+    public Cliente(Long id, String nome, String email) {
         this.id = id;
         this.nome = nome;
+        this.email = email;
     }
 
-    public Cliente(String nome) {
+    public Cliente(String nome, String email) {
         this.nome = nome;
+        this.email = email;
     }
 
     public Long getId() {
@@ -41,6 +48,10 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
 }
