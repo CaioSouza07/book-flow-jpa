@@ -33,7 +33,8 @@ public class Emprestimo {
     public Emprestimo() {
     }
 
-    public Emprestimo(Livro livro, Cliente cliente, LocalDate dataInicioEmprestimo, LocalDate dataFinalEmprestimo, boolean multaPaga) {
+    public Emprestimo(Long id, Livro livro, Cliente cliente, LocalDate dataInicioEmprestimo, LocalDate dataFinalEmprestimo, boolean multaPaga) {
+        this.id = id;
         this.livro = livro;
         this.cliente = cliente;
         this.dataInicioEmprestimo = dataInicioEmprestimo;

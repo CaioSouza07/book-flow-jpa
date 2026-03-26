@@ -1,7 +1,7 @@
 package com.domain.cliente;
 
 import com.domain.emprestimo.Emprestimo;
-import com.domain.livro.Livro;
+import com.exception.RegraDeNegocioException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,11 +33,6 @@ public class Cliente {
         this.email = email;
     }
 
-    public Cliente(String nome, String email) {
-        this.nome = nome;
-        this.email = email;
-    }
-
     public Long getId() {
         return id;
     }
@@ -48,6 +43,16 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        if(email.matches(regex)){
+            this.email = email;
+        }else {
+            throw new RegraDeNegocioException("[E-mail com formato inválido!]");
+        }
+
     }
 
     public String getEmail() {

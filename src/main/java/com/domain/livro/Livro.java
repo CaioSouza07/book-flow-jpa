@@ -34,13 +34,6 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(String titulo, String autor, int anoPublicacao, boolean disponivel) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.anoPublicacao = anoPublicacao;
-        this.disponivel = disponivel;
-    }
-
     public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel) {
         this.id = id;
         this.titulo = titulo;

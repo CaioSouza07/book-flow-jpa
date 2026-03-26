@@ -1,5 +1,7 @@
 package com;
 
+import com.domain.cliente.Cliente;
+import com.domain.cliente.ClienteDAO;
 import com.exception.RegraDeNegocioException;
 
 import java.util.Scanner;
@@ -7,9 +9,9 @@ import java.util.Scanner;
 
 public class BookFlowApplication {
 
-    private static Scanner leitor = new Scanner(System.in).useDelimiter("\n");
+    private static final Scanner leitor = new Scanner(System.in).useDelimiter("\n");
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
 
         int opcao = exibirMenu();
 
@@ -17,7 +19,7 @@ public class BookFlowApplication {
             try{
                 switch (opcao){
                     case 1:
-                        // aqui vou cadastrar um cliente
+                        cadastrarCliente();
                         break;
                     case 2:
                         // aqui vou cadastrar um livro
@@ -53,12 +55,12 @@ public class BookFlowApplication {
                         // aqui vou pagar a multa
                         break;
                     case 13:
-                        System.out.println("Encerrando programa...");
+                        System.out.println("[Encerrando programa...]");
                         break;
                 }
             } catch (RegraDeNegocioException e) {
                 System.out.println("Erro: " + e.getMessage());
-                System.out.println("Clique ENTER para voltar ao menu...");
+                System.out.println("[Clique ENTER para voltar ao menu...]");
                 leitor.next();
             }
             opcao = exibirMenu();
@@ -88,9 +90,78 @@ public class BookFlowApplication {
         System.out.println("| 13 - Encerrar programa         |");
         System.out.println("|--------------------------------|");
 
-        int opcao = leitor.nextInt();
+        return leitor.nextInt();
 
-        return opcao;
+    }
+
+    private static void cadastrarCliente(){
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Cadastrar Cliente        |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Nome: ");
+        String nome = leitor.next();
+        System.out.print("| * E-mail: ");
+        String email = leitor.next();
+        System.out.println("|--------------------------------|");
+
+        Cliente cliente = new Cliente();
+        cliente.setNome(nome);
+        cliente.setEmail(email);
+
+        ClienteDAO dao = new ClienteDAO();
+        dao.salvar(cliente);
+
+        System.out.println("\n[Novo cliente cadastrado com sucesso!!]\n");
+
+    }
+    private static void cadastrarLivro(){
+        System.out.println("|--------------------------------|");
+        System.out.println("|        Cadastrar Livro         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Nome: ");
+        String nome = leitor.next();
+        System.out.print("| * E-mail: ");
+        String email = leitor.next();
+        System.out.println("|--------------------------------|");
+
+        Cliente cliente = new Cliente();
+        cliente.setNome(nome);
+        cliente.setEmail(email);
+
+        ClienteDAO dao = new ClienteDAO();
+        dao.salvar(cliente);
+
+        System.out.println("\n[Novo cliente cadastrado com sucesso!!]\n");
+
+    }
+    private static void listarLivros(){
+
+    }
+    private static void listarLivrosDisponiveis(){
+
+    }
+    private static void buscarCliente(){
+
+    }
+    private static void buscarLivro(){
+
+    }
+    private static void editarLivro(){
+
+    }
+    private static void editarCliente(){
+
+    }
+    private static void deletarLivro(){
+
+    }
+    private static void deletarCliente(){
+
+    }
+    private static void emprestarLivro(){
+
+    }
+    private static void pagarMulta(){
 
     }
 }
