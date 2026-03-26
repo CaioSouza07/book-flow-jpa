@@ -32,7 +32,7 @@ public class BookFlowApplication {
                         listarLivros();
                         break;
                     case 4:
-                        // aqui vou listar os livros disponiveis
+                        listarLivrosDisponiveis();
                         break;
                     case 5:
                         // aqui vou buscar o cliente pelo id
@@ -201,6 +201,14 @@ public class BookFlowApplication {
 
     }
     private static void listarLivrosDisponiveis(){
+        LivroDAO dao = new LivroDAO();
+        List<Livro> listaLivrosDisponiveis = dao.listarLivrosDisponiveis();
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Livros Disponíveis       |");
+        System.out.println("|--------------------------------|");
+
+        listaLivrosDisponiveis.forEach(System.out::println);
 
     }
     private static void buscarCliente(){
