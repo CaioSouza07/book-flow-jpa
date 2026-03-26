@@ -19,7 +19,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/bookflow?useSSL=false&amp;serverTimezone=UTC"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
-            <property name="javax.persistence.jdbc.password" value="univille"/>
+            <property name="javax.persistence.jdbc.password" value="postgres"/>
 
 <!--            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>-->
 <!--            <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:./data/bookflow"/>-->

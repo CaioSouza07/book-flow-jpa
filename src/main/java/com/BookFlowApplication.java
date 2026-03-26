@@ -1,0 +1,96 @@
+package com;
+
+import com.exception.RegraDeNegocioException;
+
+import java.util.Scanner;
+
+
+public class BookFlowApplication {
+
+    private static Scanner leitor = new Scanner(System.in).useDelimiter("\n");
+
+    public static void main( String[] args ) {
+
+        int opcao = exibirMenu();
+
+        while (opcao != 13){
+            try{
+                switch (opcao){
+                    case 1:
+                        // aqui vou cadastrar um cliente
+                        break;
+                    case 2:
+                        // aqui vou cadastrar um livro
+                        break;
+                    case 3:
+                        // aqui vou listar livros
+                        break;
+                    case 4:
+                        // aqui vou listar os livros disponiveis
+                        break;
+                    case 5:
+                        // aqui vou buscar o cliente pelo id
+                        break;
+                    case 6:
+                        // aqui vou buscar o livro pelo id
+                        break;
+                    case 7:
+                        // aqui vou editar o livro
+                        break;
+                    case 8:
+                        // aqui vou editar o cliente
+                        break;
+                    case 9:
+                        // aqui vou deletar um livro
+                        break;
+                    case 10:
+                        // aqui vou deletar um cliente
+                        break;
+                    case 11:
+                        // aqui vou emprestar um livro
+                        break;
+                    case 12:
+                        // aqui vou pagar a multa
+                        break;
+                    case 13:
+                        System.out.println("Encerrando programa...");
+                        break;
+                }
+            } catch (RegraDeNegocioException e) {
+                System.out.println("Erro: " + e.getMessage());
+                System.out.println("Clique ENTER para voltar ao menu...");
+                leitor.next();
+            }
+            opcao = exibirMenu();
+        }
+
+    }
+
+    private static int exibirMenu() {
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|            BookFlow            |");
+        System.out.println("|--------------------------------|");
+        System.out.println("| Digite a opção desejada:       |");
+        System.out.println("|                                |");
+        System.out.println("| 1 - Cadastrar cliente          |");
+        System.out.println("| 2 - Cadastrar livro            |");
+        System.out.println("| 3 - Listar livros              |");
+        System.out.println("| 4 - Listar livros disponíveis  |");
+        System.out.println("| 5 - Buscar cliente             |");
+        System.out.println("| 6 - Buscar livro               |");
+        System.out.println("| 7 - Editar livro               |");
+        System.out.println("| 8 - Editar cliente             |");
+        System.out.println("| 9 - Deletar livro              |");
+        System.out.println("| 10 - Deletar cliente           |");
+        System.out.println("| 11 - Emprestar livro           |");
+        System.out.println("| 12 - Pagar multa               |");
+        System.out.println("| 13 - Encerrar programa         |");
+        System.out.println("|--------------------------------|");
+
+        int opcao = leitor.nextInt();
+
+        return opcao;
+
+    }
+}
