@@ -1,6 +1,25 @@
 package com.domain.emprestimo;
 
 import com.dao.BaseDAOImpl;
+import com.domain.cliente.Cliente;
+import com.util.EntityManagerUtil;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class EmprestimoDAO extends BaseDAOImpl<Emprestimo> {
+
+    public List<Emprestimo> listarEmprestimosAtivosPorCliente(Cliente cliente){
+
+        EntityManager em = EntityManagerUtil.getInstance().get();
+
+        try{
+            String query = "SELECT e FROM Emprestimo e WHERE e.cliente = :cliente";
+            return em.createQuery(query, Emprestimo.class)
+                    .setParameter("cliente", cliente)
+                    .getResultList();
+        }finally {
+            em.close();
+        }
+    }
 }

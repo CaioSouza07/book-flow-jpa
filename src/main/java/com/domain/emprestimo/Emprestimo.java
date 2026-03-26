@@ -14,7 +14,7 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
@@ -30,28 +30,61 @@ public class Emprestimo {
 
     private boolean multaPaga;
 
+    @Column(nullable = false)
+    private boolean ativo;
+
     public Emprestimo() {
     }
 
-    public Emprestimo(Long id, Livro livro, Cliente cliente, LocalDate dataInicioEmprestimo, LocalDate dataFinalEmprestimo, boolean multaPaga) {
+    public Emprestimo(Long id, Livro livro, Cliente cliente, LocalDate dataInicioEmprestimo, LocalDate dataFinalEmprestimo, boolean multaPaga, boolean ativo) {
         this.id = id;
         this.livro = livro;
         this.cliente = cliente;
         this.dataInicioEmprestimo = dataInicioEmprestimo;
         this.dataFinalEmprestimo = dataFinalEmprestimo;
         this.multaPaga = multaPaga;
+        this.ativo = ativo;
+    }
+
+    @Override
+    public String toString() {
+        return "| EMPRESTIMO ID: " + id + "\n" +
+                "|--------------------------------|" + "\n" +
+                "| * ID Livro: " + livro.getId() + "\n" +
+                "| * Título Livro: " + livro.getTitulo() + "\n" +
+                "| * ID Cliente: " + cliente.getId() + "\n" +
+                "| * Nome cliente: " + cliente.getNome() + "\n" +
+                "| * Ativo: " + ((ativo) ? "Sim" : "Não") + "\n" +
+                "| * Multa paga: " + ((multaPaga) ? "Sim" : "Não") + "\n" +
+                "|--------------------------------|";
     }
 
     public Livro getLivro() {
         return livro;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public LocalDate getDataInicioEmprestimo() {
         return dataInicioEmprestimo;
+    }
+
+    public void setDataInicioEmprestimo(LocalDate dataInicioEmprestimo) {
+        this.dataInicioEmprestimo = dataInicioEmprestimo;
     }
 
     public LocalDate getDataFinalEmprestimo() {
@@ -62,11 +95,21 @@ public class Emprestimo {
         return multaPaga;
     }
 
+    public void setMultaPaga(boolean multaPaga) {
+        this.multaPaga = multaPaga;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
     public void setDataFinalEmprestimo(LocalDate dataFinalEmprestimo) {
         this.dataFinalEmprestimo = dataFinalEmprestimo;
     }
 
-    public void setMultaPaga(boolean multaPaga) {
-        this.multaPaga = multaPaga;
-    }
+
 }

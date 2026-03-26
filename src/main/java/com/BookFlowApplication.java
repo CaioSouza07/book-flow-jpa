@@ -2,11 +2,14 @@ package com;
 
 import com.domain.cliente.Cliente;
 import com.domain.cliente.ClienteDAO;
+import com.domain.emprestimo.Emprestimo;
+import com.domain.emprestimo.EmprestimoDAO;
 import com.domain.livro.Categoria;
 import com.domain.livro.Livro;
 import com.domain.livro.LivroDAO;
 import com.exception.RegraDeNegocioException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +22,7 @@ public class BookFlowApplication {
 
         int opcao = exibirMenu();
 
-        while (opcao != 13){
+        while (opcao != 15){
             try{
                 switch (opcao){
                     case 1:
@@ -35,7 +38,7 @@ public class BookFlowApplication {
                         listarLivrosDisponiveis();
                         break;
                     case 5:
-                        // aqui vou buscar o cliente pelo id
+                        buscarCliente();
                         break;
                     case 6:
                         // aqui vou buscar o livro pelo id
@@ -53,12 +56,18 @@ public class BookFlowApplication {
                         // aqui vou deletar um cliente
                         break;
                     case 11:
-                        // aqui vou emprestar um livro
+                        emprestarLivro();
                         break;
                     case 12:
                         // aqui vou pagar a multa
                         break;
                     case 13:
+                        // aqui vou devolver o livro
+                        break;
+                    case 14:
+                        // aqui vou renovar o emprestimo
+                        break;
+                    case 15:
                         System.out.println("[Encerrando programa...]");
                         break;
                 }
@@ -213,8 +222,42 @@ public class BookFlowApplication {
     }
     private static void buscarCliente(){
 
+        System.out.println("|--------------------------------|");
+        System.out.println("|         Buscar Cliente         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do cliente: ");
+        Long id = leitor.nextLong();
+
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.buscarPorId(Cliente.class, id);
+
+        EmprestimoDAO empDAO = new EmprestimoDAO();
+        List<Emprestimo> listaEmprestimoCliente = empDAO.listarEmprestimosAtivosPorCliente(cliente);
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Dados Cliente         |");
+        System.out.println("|--------------------------------|");
+        System.out.println(cliente);
+
+        System.out.println("|      Histórico Empréstimos     |");
+        System.out.println("|--------------------------------|");
+        if (!listaEmprestimoCliente.isEmpty()){
+            listaEmprestimoCliente.forEach(System.out::println);
+        }else {
+            System.out.println("| [Não possuí empréstimos]       |");
+        }
+
     }
     private static void buscarLivro(){
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Buscar Livro          |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long id = leitor.nextLong();
+
+        LivroDAO dao = new LivroDAO();
+        Livro livro = dao.buscarPorId(Livro.class, id);
 
     }
     private static void editarLivro(){
@@ -230,6 +273,32 @@ public class BookFlowApplication {
 
     }
     private static void emprestarLivro(){
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Emprestimo de Livro      |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long livroId = leitor.nextLong();
+        System.out.print("| * Digite o ID do cliente: ");
+        Long clienteId = leitor.nextLong();
+
+        LivroDAO livroDAO = new LivroDAO();
+        Livro livro = livroDAO.buscarPorId(Livro.class, livroId);
+
+        ClienteDAO clienteDAO = new ClienteDAO();
+        Cliente cliente = clienteDAO.buscarPorId(Cliente.class, clienteId);
+
+        Emprestimo emprestimo = new Emprestimo();
+        emprestimo.setLivro(livro);
+        emprestimo.setCliente(cliente);
+        emprestimo.setDataInicioEmprestimo(LocalDate.now());
+        emprestimo.setMultaPaga(false);
+        emprestimo.setAtivo(true);
+        emprestimo.setDataFinalEmprestimo(emprestimo.getDataInicioEmprestimo().plusMonths(3));
+
+        EmprestimoDAO empreDAO = new EmprestimoDAO();
+        empreDAO.salvar(emprestimo);
+
+        System.out.println("\n[Novo emprestimo cadastrado com sucesso!!]\n");
 
     }
     private static void pagarMulta(){

@@ -33,6 +33,15 @@ public class Cliente {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "| CLIENTE ID: " + id + "\n" +
+                "|--------------------------------|" + "\n" +
+                "| * Nome: " + nome + "\n" +
+                "| * E-mail: " + email + "\n" +
+                "|--------------------------------|";
+    }
+
     public Long getId() {
         return id;
     }
