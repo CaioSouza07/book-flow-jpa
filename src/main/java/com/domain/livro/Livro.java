@@ -35,12 +35,14 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel) {
+    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel, Categoria categoria, Emprestimo emprestimo) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.disponivel = disponivel;
+        this.categoria = categoria;
+        this.emprestimo = emprestimo;
     }
 
     public Emprestimo getEmprestimo() {
@@ -92,5 +94,13 @@ public class Livro {
 
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

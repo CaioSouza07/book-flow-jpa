@@ -2,9 +2,11 @@ package com;
 
 import com.domain.cliente.Cliente;
 import com.domain.cliente.ClienteDAO;
+import com.domain.livro.Categoria;
 import com.domain.livro.Livro;
 import com.domain.livro.LivroDAO;
 import com.exception.RegraDeNegocioException;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import java.util.Scanner;
 
@@ -126,13 +128,45 @@ public class BookFlowApplication {
         String autor = leitor.next();
         System.out.print("| * Ano: ");
         int ano = leitor.nextInt();
+        System.out.println("| - Lista:");
+        exibirMenuCategorias();
+        System.out.print("| * Nº da categoria: ");
+        int categoria = leitor.nextInt();
         System.out.println("|--------------------------------|");
+
+        Categoria categoriaLivro;
+        switch (categoria){
+            case 1:
+                categoriaLivro = Categoria.TERROR;
+                break;
+            case 2:
+                categoriaLivro = Categoria.ROMANCE;
+                break;
+            case 3:
+                categoriaLivro = Categoria.AVENTURA;
+                break;
+            case 4:
+                categoriaLivro = Categoria.FICCAO;
+                break;
+            case 5:
+                categoriaLivro = Categoria.COMEDIA;
+                break;
+            case 6:
+                categoriaLivro = Categoria.TEOLOGICO;
+                break;
+            case 7:
+                categoriaLivro = Categoria.TECNICO;
+                break;
+            default:
+                throw new RegraDeNegocioException("[Número da categoria inválido!]");
+        }
 
         Livro livro = new Livro();
         livro.setTitulo(titulo);
         livro.setAutor(autor);
         livro.setAnoPublicacao(ano);
         livro.setDisponivel(true);
+        livro.setCategoria(categoriaLivro);
 
         LivroDAO dao = new LivroDAO();
         dao.salvar(livro);
@@ -140,6 +174,20 @@ public class BookFlowApplication {
         System.out.println("\n[Novo livro cadastrado com sucesso!!]\n");
 
     }
+
+    private static void exibirMenuCategorias() {
+        System.out.println("|             |----Categorias----|");
+        System.out.println("|             | 1 - TERROR       |");
+        System.out.println("|             | 2 - ROMANCE      |");
+        System.out.println("|             | 3 - AVENTURA     |");
+        System.out.println("|             | 4 - FICCAO       |");
+        System.out.println("|             | 5 - COMEDIA      |");
+        System.out.println("|             | 6 - TEOLOGICO    |");
+        System.out.println("|             | 7 - TECNICO      |");
+        System.out.println("|             |------------------|");
+
+    }
+
     private static void listarLivros(){
 
     }
