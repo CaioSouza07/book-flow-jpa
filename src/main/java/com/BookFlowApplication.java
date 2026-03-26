@@ -2,6 +2,8 @@ package com;
 
 import com.domain.cliente.Cliente;
 import com.domain.cliente.ClienteDAO;
+import com.domain.livro.Livro;
+import com.domain.livro.LivroDAO;
 import com.exception.RegraDeNegocioException;
 
 import java.util.Scanner;
@@ -22,7 +24,7 @@ public class BookFlowApplication {
                         cadastrarCliente();
                         break;
                     case 2:
-                        // aqui vou cadastrar um livro
+                        cadastrarLivro();
                         break;
                     case 3:
                         // aqui vou listar livros
@@ -118,20 +120,24 @@ public class BookFlowApplication {
         System.out.println("|--------------------------------|");
         System.out.println("|        Cadastrar Livro         |");
         System.out.println("|--------------------------------|");
-        System.out.print("| * Nome: ");
-        String nome = leitor.next();
-        System.out.print("| * E-mail: ");
-        String email = leitor.next();
+        System.out.print("| * Título: ");
+        String titulo = leitor.next();
+        System.out.print("| * Autor: ");
+        String autor = leitor.next();
+        System.out.print("| * Ano: ");
+        int ano = leitor.nextInt();
         System.out.println("|--------------------------------|");
 
-        Cliente cliente = new Cliente();
-        cliente.setNome(nome);
-        cliente.setEmail(email);
+        Livro livro = new Livro();
+        livro.setTitulo(titulo);
+        livro.setAutor(autor);
+        livro.setAnoPublicacao(ano);
+        livro.setDisponivel(true);
 
-        ClienteDAO dao = new ClienteDAO();
-        dao.salvar(cliente);
+        LivroDAO dao = new LivroDAO();
+        dao.salvar(livro);
 
-        System.out.println("\n[Novo cliente cadastrado com sucesso!!]\n");
+        System.out.println("\n[Novo livro cadastrado com sucesso!!]\n");
 
     }
     private static void listarLivros(){

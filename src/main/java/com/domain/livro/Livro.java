@@ -1,6 +1,7 @@
 package com.domain.livro;
 
 import com.domain.emprestimo.Emprestimo;
+import com.exception.RegraDeNegocioException;
 
 import javax.persistence.*;
 
@@ -75,7 +76,14 @@ public class Livro {
     }
 
     public void setAnoPublicacao(int anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
+        String regex = "^\\d{4}$";
+        String ano = anoPublicacao + "";
+        if (ano.matches(regex)){
+            this.anoPublicacao = anoPublicacao;
+        }else {
+            throw new RegraDeNegocioException("[Ano com formato inválido!]");
+        }
+
     }
 
     public boolean isDisponivel() {
