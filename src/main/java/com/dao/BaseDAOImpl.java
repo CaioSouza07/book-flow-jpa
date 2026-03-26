@@ -1,10 +1,11 @@
 package com.dao;
 
+import com.domain.livro.Livro;
 import com.util.EntityManagerUtil;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public abstract class BaseDAOImpl<T> implements BaseDAO<T>{
-
     @Override
     public void salvar(T entity) {
 
@@ -73,6 +74,20 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>{
             }
             throw new RuntimeException("Erro: " + e.getMessage());
         } finally {
+            em.close();
+        }
+
+    }
+
+    @Override
+    public List<T> listarTodos(Class<T> classEntity){
+
+        EntityManager em = EntityManagerUtil.getInstance().get();
+
+        try{
+            String query = String.format("SELECT c FROM %s c", classEntity.getSimpleName());
+            return em.createQuery(query, classEntity).getResultList();
+        }finally {
             em.close();
         }
 

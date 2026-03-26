@@ -6,8 +6,8 @@ import com.domain.livro.Categoria;
 import com.domain.livro.Livro;
 import com.domain.livro.LivroDAO;
 import com.exception.RegraDeNegocioException;
-import jdk.swing.interop.SwingInterOpUtils;
 
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -29,7 +29,7 @@ public class BookFlowApplication {
                         cadastrarLivro();
                         break;
                     case 3:
-                        // aqui vou listar livros
+                        listarLivros();
                         break;
                     case 4:
                         // aqui vou listar os livros disponiveis
@@ -73,8 +73,8 @@ public class BookFlowApplication {
     }
 
     private static int exibirMenu() {
-
-        System.out.println("|--------------------------------|");
+        System.out.println("__________________________________");
+        System.out.println("|"+" ".repeat(32)+"|");
         System.out.println("|            BookFlow            |");
         System.out.println("|--------------------------------|");
         System.out.println("| Digite a opção desejada:       |");
@@ -189,6 +189,15 @@ public class BookFlowApplication {
     }
 
     private static void listarLivros(){
+
+        LivroDAO dao = new LivroDAO();
+        List<Livro> listaLivros = dao.listarTodos(Livro.class);
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|        Lista de Livros         |");
+        System.out.println("|--------------------------------|");
+
+        listaLivros.forEach(System.out::println);
 
     }
     private static void listarLivrosDisponiveis(){

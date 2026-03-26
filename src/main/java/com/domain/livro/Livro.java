@@ -103,4 +103,16 @@ public class Livro {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
+    @Override
+    public String toString() {
+        return "| LIVRO ID: " + id + "\n" +
+                "|--------------------------------|" + "\n" +
+                "| * Título: " + titulo + "\n" +
+                "| * Autor: " + autor + "\n" +
+                "| * Ano: " + anoPublicacao + "\n" +
+                "| * Categoria: " + categoria.name() + "\n" +
+                "| * Disponível: " + ((disponivel) ? "Sim" : "Não") + "\n" +
+                "|--------------------------------|";
+    }
 }
