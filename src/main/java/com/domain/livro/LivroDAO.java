@@ -21,4 +21,5 @@ public class LivroDAO extends BaseDAOImpl<Livro> {
         }
 
     }
+
 }

@@ -41,13 +41,13 @@ public class BookFlowApplication {
                         buscarCliente();
                         break;
                     case 6:
-                        // aqui vou buscar o livro pelo id
+                        buscarLivro();
                         break;
                     case 7:
-                        // aqui vou editar o livro
+                        editarLivro();
                         break;
                     case 8:
-                        // aqui vou editar o cliente
+                        editarCliente();
                         break;
                     case 9:
                         // aqui vou deletar um livro
@@ -72,7 +72,7 @@ public class BookFlowApplication {
                         break;
                 }
             } catch (RegraDeNegocioException e) {
-                System.out.println("Erro: " + e.getMessage());
+                System.out.println("\nErro: " + e.getMessage() + "\n");
                 System.out.println("[Clique ENTER para voltar ao menu...]");
                 leitor.next();
             }
@@ -259,14 +259,112 @@ public class BookFlowApplication {
         LivroDAO dao = new LivroDAO();
         Livro livro = dao.buscarPorId(Livro.class, id);
 
+        System.out.println("|--------------------------------|");
+        System.out.println("|           Dados Livro          |");
+        System.out.println("|--------------------------------|");
+        System.out.println(livro);
+
     }
     private static void editarLivro(){
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Buscar Livro          |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long id = leitor.nextLong();
+
+        LivroDAO dao = new LivroDAO();
+        Livro livro = dao.buscarPorId(Livro.class, id);
+
+        if (livro == null){
+            throw new RegraDeNegocioException("[Livro com ID desejado não encontrado!]");
+        }
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Editar Livro          |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Título: ");
+        String titulo = leitor.next();
+        System.out.print("| * Autor: ");
+        String autor = leitor.next();
+        System.out.print("| * Ano: ");
+        int ano = leitor.nextInt();
+        System.out.println("| - Lista:");
+        exibirMenuCategorias();
+        System.out.print("| * Nº da categoria: ");
+        int categoria = leitor.nextInt();
+        System.out.println("|--------------------------------|");
+
+        Categoria categoriaLivro;
+        switch (categoria){
+            case 1:
+                categoriaLivro = Categoria.TERROR;
+                break;
+            case 2:
+                categoriaLivro = Categoria.ROMANCE;
+                break;
+            case 3:
+                categoriaLivro = Categoria.AVENTURA;
+                break;
+            case 4:
+                categoriaLivro = Categoria.FICCAO;
+                break;
+            case 5:
+                categoriaLivro = Categoria.COMEDIA;
+                break;
+            case 6:
+                categoriaLivro = Categoria.TEOLOGICO;
+                break;
+            case 7:
+                categoriaLivro = Categoria.TECNICO;
+                break;
+            default:
+                throw new RegraDeNegocioException("[Número da categoria inválido!]");
+        }
+
+        livro.setTitulo(titulo);
+        livro.setAutor(autor);
+        livro.setAnoPublicacao(ano);
+        livro.setCategoria(categoriaLivro);
+
+        dao.atualizar(livro);
+
+        System.out.println("\n[Livro editado com sucesso!!]\n");
 
     }
     private static void editarCliente(){
 
+        System.out.println("|--------------------------------|");
+        System.out.println("|         Buscar Cliente         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do cliente: ");
+        Long id = leitor.nextLong();
+
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.buscarPorId(Cliente.class, id);
+
+        if(cliente == null){
+            throw new RegraDeNegocioException("[Não existe nenhum cliente com esse ID!]");
+        }
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|         Editar Cliente         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Nome: ");
+        String nome = leitor.next();
+        System.out.print("| * E-mail: ");
+        String email = leitor.next();
+        System.out.println("|--------------------------------|");
+
+        cliente.setNome(nome);
+        cliente.setEmail(email);
+
+        dao.atualizar(cliente);
+
     }
     private static void deletarLivro(){
+
+
 
     }
     private static void deletarCliente(){
@@ -284,6 +382,11 @@ public class BookFlowApplication {
         LivroDAO livroDAO = new LivroDAO();
         Livro livro = livroDAO.buscarPorId(Livro.class, livroId);
 
+        if(!livro.isDisponivel()){
+            throw new RegraDeNegocioException("\n[O Livro desejado não está disponível para empréstimo!]\n");
+        }
+
+
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = clienteDAO.buscarPorId(Cliente.class, clienteId);
 
@@ -297,6 +400,8 @@ public class BookFlowApplication {
 
         EmprestimoDAO empreDAO = new EmprestimoDAO();
         empreDAO.salvar(emprestimo);
+        livro.setDisponivel(false);
+        livroDAO.atualizar(livro);
 
         System.out.println("\n[Novo emprestimo cadastrado com sucesso!!]\n");
 
