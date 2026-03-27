@@ -59,16 +59,16 @@ public class BookFlowApplication {
                         emprestarLivro();
                         break;
                     case 12:
-                        devolverLivro();
+                        devolverLivro(); // FALTA FAZER
                         break;
                     case 13:
-                        // renovar e pagar multa caso tenha
+                        // renovar e pagar multa caso tenha FALTA FAZER
                         break;
                     case 14:
                         listarClientes();
                         break;
                     case 15:
-                        // listar emprestimos
+                        listarEmprestimos();
                         break;
                     case 16:
                         System.out.println("[Encerrando programa...]");
@@ -83,6 +83,7 @@ public class BookFlowApplication {
         }
 
     }
+
 
 
 
@@ -104,10 +105,10 @@ public class BookFlowApplication {
         System.out.println("| 9 - Deletar livro              |");
         System.out.println("| 10 - Deletar cliente           |");
         System.out.println("| 11 - Emprestar livro           |");
-        System.out.println("| 12 - Pagar multa               |");
-        System.out.println("| 13 - Devolver livro            |");
-        System.out.println("| 14 - Renovar emprestimo        |");
-        System.out.println("| 15 - Listar clientes           |");
+        System.out.println("| 12 - Devolver livro            |");
+        System.out.println("| 13 - Renovar emprestimo        |");
+        System.out.println("| 14 - Listar clientes           |");
+        System.out.println("| 15 - Listar emprestimos        |");
         System.out.println("| 16 - Encerrar programa         |");
         System.out.println("|--------------------------------|");
 
@@ -485,7 +486,7 @@ public class BookFlowApplication {
     public static void devolverLivro(){
 
         System.out.println("|--------------------------------|");
-        System.out.println("|       Devolver Emprestimo      |");
+        System.out.println("|         Devolver Livro         |");
         System.out.println("|--------------------------------|");
         System.out.print("| * Digite o ID do livro: ");
         Long livroId = leitor.nextLong();
@@ -496,6 +497,11 @@ public class BookFlowApplication {
         if (livro == null){
             throw new RegraDeNegocioException("[Não existe um livro com esse ID!]");
         }
+
+        EmprestimoDAO empDAO = new EmprestimoDAO();
+        List<Emprestimo> listaEmprestimos = empDAO.listarEmprestimosPorLivro(livro);
+
+        System.out.println(listaEmprestimos);
 
 
 
@@ -509,5 +515,18 @@ public class BookFlowApplication {
         System.out.println("|--------------------------------|");
 
         listaClientes.forEach(System.out::println);
+    }
+
+    private static void listarEmprestimos() {
+
+        EmprestimoDAO dao = new EmprestimoDAO();
+        List<Emprestimo> listaEmprestimos = dao.listarTodos(Emprestimo.class);
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|      Lista de Emprestimos      |");
+        System.out.println("|--------------------------------|");
+
+        listaEmprestimos.forEach(System.out::println);
+
     }
 }
