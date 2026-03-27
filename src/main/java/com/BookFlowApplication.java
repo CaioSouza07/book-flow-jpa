@@ -22,7 +22,7 @@ public class BookFlowApplication {
 
         int opcao = exibirMenu();
 
-        while (opcao != 15){
+        while (opcao != 16){
             try{
                 switch (opcao){
                     case 1:
@@ -50,24 +50,27 @@ public class BookFlowApplication {
                         editarCliente();
                         break;
                     case 9:
-                        // aqui vou deletar um livro
+                        deletarLivro();
                         break;
                     case 10:
-                        // aqui vou deletar um cliente
+                        deletarCliente();
                         break;
                     case 11:
                         emprestarLivro();
                         break;
                     case 12:
-                        // aqui vou pagar a multa
+                        devolverLivro();
                         break;
                     case 13:
-                        // aqui vou devolver o livro
+                        // renovar e pagar multa caso tenha
                         break;
                     case 14:
-                        // aqui vou renovar o emprestimo
+                        listarClientes();
                         break;
                     case 15:
+                        // listar emprestimos
+                        break;
+                    case 16:
                         System.out.println("[Encerrando programa...]");
                         break;
                 }
@@ -80,6 +83,8 @@ public class BookFlowApplication {
         }
 
     }
+
+
 
     private static int exibirMenu() {
         System.out.println("__________________________________");
@@ -100,7 +105,10 @@ public class BookFlowApplication {
         System.out.println("| 10 - Deletar cliente           |");
         System.out.println("| 11 - Emprestar livro           |");
         System.out.println("| 12 - Pagar multa               |");
-        System.out.println("| 13 - Encerrar programa         |");
+        System.out.println("| 13 - Devolver livro            |");
+        System.out.println("| 14 - Renovar emprestimo        |");
+        System.out.println("| 15 - Listar clientes           |");
+        System.out.println("| 16 - Encerrar programa         |");
         System.out.println("|--------------------------------|");
 
         return leitor.nextInt();
@@ -120,6 +128,7 @@ public class BookFlowApplication {
         Cliente cliente = new Cliente();
         cliente.setNome(nome);
         cliente.setEmail(email);
+        cliente.setAtivo(true);
 
         ClienteDAO dao = new ClienteDAO();
         dao.salvar(cliente);
@@ -175,6 +184,7 @@ public class BookFlowApplication {
         livro.setAutor(autor);
         livro.setAnoPublicacao(ano);
         livro.setDisponivel(true);
+        livro.setAtivo(true);
         livro.setCategoria(categoriaLivro);
 
         LivroDAO dao = new LivroDAO();
@@ -232,7 +242,7 @@ public class BookFlowApplication {
         Cliente cliente = dao.buscarPorId(Cliente.class, id);
 
         EmprestimoDAO empDAO = new EmprestimoDAO();
-        List<Emprestimo> listaEmprestimoCliente = empDAO.listarEmprestimosAtivosPorCliente(cliente);
+        List<Emprestimo> listaEmprestimoCliente = empDAO.listarEmprestimosPorCliente(cliente);
 
         System.out.println("|--------------------------------|");
         System.out.println("|          Dados Cliente         |");
@@ -289,6 +299,8 @@ public class BookFlowApplication {
         String autor = leitor.next();
         System.out.print("| * Ano: ");
         int ano = leitor.nextInt();
+        System.out.print("| * Ativo(s/n): ");
+        boolean ativo = (leitor.next().equalsIgnoreCase("s"));
         System.out.println("| - Lista:");
         exibirMenuCategorias();
         System.out.print("| * Nº da categoria: ");
@@ -326,6 +338,7 @@ public class BookFlowApplication {
         livro.setAutor(autor);
         livro.setAnoPublicacao(ano);
         livro.setCategoria(categoriaLivro);
+        livro.setAtivo(ativo);
 
         dao.atualizar(livro);
 
@@ -354,20 +367,73 @@ public class BookFlowApplication {
         String nome = leitor.next();
         System.out.print("| * E-mail: ");
         String email = leitor.next();
+        System.out.print("| * Ativo(s/n): ");
+        boolean ativo = (leitor.next().equalsIgnoreCase("s"));
         System.out.println("|--------------------------------|");
 
         cliente.setNome(nome);
         cliente.setEmail(email);
+        cliente.setAtivo(ativo);
 
         dao.atualizar(cliente);
+
+        System.out.println("\n[Cliente editado com sucesso!!]\n");
 
     }
     private static void deletarLivro(){
 
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Deletar Livro         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long id = leitor.nextLong();
 
+        LivroDAO dao = new LivroDAO();
+        Livro livro = dao.buscarPorId(Livro.class, id);
+
+        if (livro == null){
+            throw new RegraDeNegocioException("[Livro com ID desejado não encontrado!]");
+        }
+        System.out.println("| - Confirma a exclusão? (s/n)   |");
+        String confirmacao = leitor.next().toLowerCase();
+
+        if(confirmacao.equals("s")){
+            livro.setAtivo(false);
+            dao.atualizar(livro);
+            System.out.println("[Livro deletado com sucesso!]");
+        } else if (confirmacao.equals("n")) {
+            System.out.println("[Exclusão cancelada pelo usuário!]");
+        }else{
+            throw new RegraDeNegocioException("[Digite uma letra válida!]");
+        }
 
     }
     private static void deletarCliente(){
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|         Deletar Cliente        |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do cliente: ");
+        Long id = leitor.nextLong();
+
+        ClienteDAO cliDAO = new ClienteDAO();
+        Cliente cliente = cliDAO.buscarPorId(Cliente.class, id);
+
+        if (cliente == null){
+            throw new RegraDeNegocioException("[Cliente com ID desejado não encontrado!]");
+        }
+        System.out.println("| - Confirma a exclusão? (s/n)   |");
+        String confirmacao = leitor.next().toLowerCase();
+
+        if(confirmacao.equals("s")){
+            cliente.setAtivo(false);
+            cliDAO.atualizar(cliente);
+            System.out.println("[Cliente deletado com sucesso!]");
+        } else if (confirmacao.equals("n")) {
+            System.out.println("[Exclusão cancelada pelo usuário!]");
+        }else{
+            throw new RegraDeNegocioException("[Digite uma letra válida!]");
+        }
 
     }
     private static void emprestarLivro(){
@@ -386,9 +452,16 @@ public class BookFlowApplication {
             throw new RegraDeNegocioException("\n[O Livro desejado não está disponível para empréstimo!]\n");
         }
 
+        if (!livro.isAtivo()){
+            throw new RegraDeNegocioException("\n[O livro está inativo no sistema, não é possível empresta-lo]\n");
+        }
 
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = clienteDAO.buscarPorId(Cliente.class, clienteId);
+
+        if (!cliente.isAtivo()){
+            throw new RegraDeNegocioException("\n[O cliente está inativo no sistema, não é possivel utiliza-lo]\n");
+        }
 
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.setLivro(livro);
@@ -408,5 +481,33 @@ public class BookFlowApplication {
     }
     private static void pagarMulta(){
 
+    }
+    public static void devolverLivro(){
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Devolver Emprestimo      |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long livroId = leitor.nextLong();
+
+        LivroDAO livroDAO = new LivroDAO();
+        Livro livro = livroDAO.buscarPorId(Livro.class, livroId);
+
+        if (livro == null){
+            throw new RegraDeNegocioException("[Não existe um livro com esse ID!]");
+        }
+
+
+
+    }
+    private static void listarClientes() {
+        ClienteDAO dao = new ClienteDAO();
+        List<Cliente> listaClientes = dao.listarTodos(Cliente.class);
+
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Lista de Clientes        |");
+        System.out.println("|--------------------------------|");
+
+        listaClientes.forEach(System.out::println);
     }
 }

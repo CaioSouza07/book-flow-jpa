@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EmprestimoDAO extends BaseDAOImpl<Emprestimo> {
 
-    public List<Emprestimo> listarEmprestimosAtivosPorCliente(Cliente cliente){
+    public List<Emprestimo> listarEmprestimosPorCliente(Cliente cliente){
 
         EntityManager em = EntityManagerUtil.getInstance().get();
 
@@ -22,4 +22,6 @@ public class EmprestimoDAO extends BaseDAOImpl<Emprestimo> {
             em.close();
         }
     }
+
+
 }

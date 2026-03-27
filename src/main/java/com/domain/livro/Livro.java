@@ -32,10 +32,13 @@ public class Livro {
     @OneToOne(mappedBy = "livro")
     private Emprestimo emprestimo;
 
+    @Column(nullable = false)
+    private boolean ativo;
+
     public Livro() {
     }
 
-    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel, Categoria categoria, Emprestimo emprestimo) {
+    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel, Categoria categoria, Emprestimo emprestimo, boolean ativo) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -43,6 +46,15 @@ public class Livro {
         this.disponivel = disponivel;
         this.categoria = categoria;
         this.emprestimo = emprestimo;
+        this.ativo = ativo;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public Emprestimo getEmprestimo() {
@@ -113,6 +125,7 @@ public class Livro {
                 "| * Ano: " + anoPublicacao + "\n" +
                 "| * Categoria: " + categoria.name() + "\n" +
                 "| * Disponível: " + ((disponivel) ? "Sim" : "Não") + "\n" +
+                "| * Ativo: " + ((ativo) ? "Sim" : "Não") + "\n" +
                 "|--------------------------------|";
     }
 }

@@ -23,14 +23,18 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente")
     private List<Emprestimo> listaEmprestimos;
 
+    @Column(nullable = false)
+    private boolean ativo;
+
 
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String email) {
+    public Cliente(Long id, String nome, String email, boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.email = email;
+        this.ativo = ativo;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class Cliente {
                 "|--------------------------------|" + "\n" +
                 "| * Nome: " + nome + "\n" +
                 "| * E-mail: " + email + "\n" +
+                "| * Ativo: " + ((ativo) ? "Sim" : "Não") + "\n" +
                 "|--------------------------------|";
     }
 
@@ -52,6 +57,14 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public void setEmail(String email) {
