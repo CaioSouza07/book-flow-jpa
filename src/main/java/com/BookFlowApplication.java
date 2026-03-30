@@ -10,6 +10,7 @@ import com.domain.livro.LivroDAO;
 import com.exception.RegraDeNegocioException;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Scanner;
 
@@ -449,6 +450,10 @@ public class BookFlowApplication {
         LivroDAO livroDAO = new LivroDAO();
         Livro livro = livroDAO.buscarPorId(Livro.class, livroId);
 
+        if (livro == null){
+            throw new RegraDeNegocioException("\n[O livro com ID desejado não existe!]\n");
+        }
+
         if(!livro.isDisponivel()){
             throw new RegraDeNegocioException("\n[O Livro desejado não está disponível para empréstimo!]\n");
         }
@@ -459,6 +464,10 @@ public class BookFlowApplication {
 
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = clienteDAO.buscarPorId(Cliente.class, clienteId);
+
+        if (cliente == null){
+            throw new RegraDeNegocioException("\n[Não existe nenhum cliente com esse ID!]\n");
+        }
 
         if (!cliente.isAtivo()){
             throw new RegraDeNegocioException("\n[O cliente está inativo no sistema, não é possivel utiliza-lo]\n");
@@ -499,13 +508,47 @@ public class BookFlowApplication {
         }
 
         EmprestimoDAO empDAO = new EmprestimoDAO();
-        List<Emprestimo> listaEmprestimos = empDAO.listarEmprestimosPorLivro(livro);
+        List<Emprestimo> listaEmprestimos = empDAO.listarEmprestimosPorLivroAtivos(livro);
 
-        System.out.println(listaEmprestimos);
+        if (listaEmprestimos == null){
+            throw new RegraDeNegocioException("[Não há nenhum emprestimo ativo com esse livro!]");
+        }
+
+        Emprestimo emprestimo = listaEmprestimos.get(0);
+
+        double multa = calcMulta(emprestimo.getDataFinalEmprestimo());
+        boolean prosseguir = true;
+
+        if (multa > 0){
+            System.out.printf("[O usuário deverá pagar uma multa de R$ %.2f reais, confirme o pagamento para prosseguir (s/n)]%n", multa);
+            prosseguir = (leitor.next().equalsIgnoreCase("s"));
+        }
+
+        if (prosseguir){
+            emprestimo.setAtivo(false);
+            emprestimo.setMultaPaga((multa > 0));
+            livro.setDisponivel(true);
+
+            livroDAO.atualizar(livro);
+            empDAO.atualizar(emprestimo);
+
+            System.out.println("[Livro devolvido com sucesso]");
+
+        }
 
 
 
     }
+
+    private static double calcMulta(LocalDate diaFinalEmprestimo){
+        LocalDate dataHoje = LocalDate.now();
+       if(dataHoje.isAfter(diaFinalEmprestimo)){
+           long dias = ChronoUnit.DAYS.between(diaFinalEmprestimo, dataHoje);
+           return dias * 0.5;
+       }
+        return 0;
+    }
+
     private static void listarClientes() {
         ClienteDAO dao = new ClienteDAO();
         List<Cliente> listaClientes = dao.listarTodos(Cliente.class);

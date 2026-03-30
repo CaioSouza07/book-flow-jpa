@@ -24,7 +24,7 @@ public class EmprestimoDAO extends BaseDAOImpl<Emprestimo> {
         }
     }
 
-    public List<Emprestimo> listarEmprestimosPorLivro(Livro livro){
+    public List<Emprestimo> listarEmprestimosPorLivroAtivos(Livro livro){
 
         EntityManager em = EntityManagerUtil.getInstance().get();
 

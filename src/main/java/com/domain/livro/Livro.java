@@ -4,6 +4,7 @@ import com.domain.emprestimo.Emprestimo;
 import com.exception.RegraDeNegocioException;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "livros")
@@ -29,8 +30,8 @@ public class Livro {
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
-    @OneToOne(mappedBy = "livro")
-    private Emprestimo emprestimo;
+    @OneToMany(mappedBy = "livro")
+    private List<Emprestimo> listaEmprestimos;
 
     @Column(nullable = false)
     private boolean ativo;
@@ -38,14 +39,14 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel, Categoria categoria, Emprestimo emprestimo, boolean ativo) {
+    public Livro(Long id, String titulo, String autor, int anoPublicacao, boolean disponivel, Categoria categoria, List<Emprestimo> listaEmprestimos, boolean ativo) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.disponivel = disponivel;
         this.categoria = categoria;
-        this.emprestimo = emprestimo;
+        this.listaEmprestimos = listaEmprestimos;
         this.ativo = ativo;
     }
 
@@ -57,12 +58,12 @@ public class Livro {
         this.ativo = ativo;
     }
 
-    public Emprestimo getEmprestimo() {
-        return emprestimo;
+    public List<Emprestimo> getListaEmprestimos() {
+        return listaEmprestimos;
     }
 
-    public void setEmprestimo(Emprestimo emprestimo) {
-        this.emprestimo = emprestimo;
+    public void setListaEmprestimos(List<Emprestimo> listaEmprestimos) {
+        this.listaEmprestimos = listaEmprestimos;
     }
 
     public Long getId() {

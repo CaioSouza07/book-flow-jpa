@@ -14,7 +14,7 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne()
+    @ManyToOne
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
