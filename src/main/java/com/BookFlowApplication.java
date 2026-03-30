@@ -60,10 +60,10 @@ public class BookFlowApplication {
                         emprestarLivro();
                         break;
                     case 12:
-                        devolverLivro(); // FALTA FAZER
+                        devolverLivro();
                         break;
                     case 13:
-                        // renovar e pagar multa caso tenha FALTA FAZER
+                        renovarLivro();
                         break;
                     case 14:
                         listarClientes();
@@ -489,9 +489,7 @@ public class BookFlowApplication {
         System.out.println("\n[Novo emprestimo cadastrado com sucesso!!]\n");
 
     }
-    private static void pagarMulta(){
 
-    }
     public static void devolverLivro(){
 
         System.out.println("|--------------------------------|");
@@ -558,6 +556,48 @@ public class BookFlowApplication {
         System.out.println("|--------------------------------|");
 
         listaClientes.forEach(System.out::println);
+    }
+
+    private static void renovarLivro(){
+        System.out.println("|--------------------------------|");
+        System.out.println("|          Renovar Livro         |");
+        System.out.println("|--------------------------------|");
+        System.out.print("| * Digite o ID do livro: ");
+        Long livroId = leitor.nextLong();
+
+        LivroDAO livroDAO = new LivroDAO();
+        Livro livro = livroDAO.buscarPorId(Livro.class, livroId);
+
+        if (livro == null){
+            throw new RegraDeNegocioException("[Não existe um livro com esse ID!]");
+        }
+
+        EmprestimoDAO empDAO = new EmprestimoDAO();
+        List<Emprestimo> listaEmprestimos = empDAO.listarEmprestimosPorLivroAtivos(livro);
+
+        if (listaEmprestimos == null){
+            throw new RegraDeNegocioException("[Não há nenhum emprestimo ativo com esse livro!]");
+        }
+
+        Emprestimo emprestimo = listaEmprestimos.get(0);
+
+        double multa = calcMulta(emprestimo.getDataFinalEmprestimo());
+        boolean prosseguir = true;
+
+        if (multa > 0){
+            System.out.printf("[O usuário deverá pagar uma multa de R$ %.2f reais, confirme o pagamento para prosseguir (s/n)]%n", multa);
+            prosseguir = (leitor.next().equalsIgnoreCase("s"));
+        }
+
+        if (prosseguir){
+            emprestimo.setMultaPaga((multa > 0));
+            emprestimo.setDataFinalEmprestimo(LocalDate.now().plusMonths(3));
+
+            empDAO.atualizar(emprestimo);
+
+            System.out.println("[Empréstimo renovado com sucesso]");
+
+        }
     }
 
     private static void listarEmprestimos() {
